@@ -10,6 +10,8 @@ import com.realityexpander.stateflowvsflowvsshareflowvslivedata.databinding.Acti
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+// Original video: https://www.youtube.com/watch?v=6Jc6-INantQ
+
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
@@ -55,11 +57,13 @@ class MainActivity : AppCompatActivity() {
     private fun subscribeToObservables() {
 
         // LiveData - re-emits after config change
+        // Deprecated in favor of StateFlow
         viewModel.liveData.observe(this, Observer {
             binding.tvLiveData.text = "LiveData: $it"
         })
 
-        // StateFlow - similar to liveData but it is a Kotlin Flow
+        // StateFlow - similar to liveData but it is a Kotlin Flow.
+        // Used to save STATE
         // Easier than livedata for testing (can use TestObserver, no waiting for `delays`)
         // StateFlow is a HOT flow (keeps emitting even if no observers)
         // StateFlow will re-emit its value after config change.
@@ -70,6 +74,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // SharedFlow
+        // Used to send ONE-TIME events
         // A HOT flow, so it will still emit events even if no observers/collectors.
         // Used for one-time events. (e.g. navigation events, toast or snackbar events)
         // Value will NOT be re-emitted after config change.
